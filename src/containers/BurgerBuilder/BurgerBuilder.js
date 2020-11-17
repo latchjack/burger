@@ -36,7 +36,7 @@ class BurgerBuilder extends Component {
     */
     const ingredients = {
       /* ============================================
-      | make a copy of ingredients from state using spread
+      | Make a copy of ingredients from state using spread
       | =============================================
       */
       ...this.state.ingredients
@@ -67,6 +67,10 @@ class BurgerBuilder extends Component {
       .reduce((sum, element) => {
         return sum + element;
       }, 0);
+    /* ============================================
+    | If sum is greater than 0, purchasable will be either True or False.
+    | =============================================
+    */
     this.setState({ purchasable: sum > 0 });
   }
 
