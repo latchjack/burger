@@ -18,7 +18,53 @@ class BurgerBuilder extends Component {
       cheese: 0,
       meat: 0
     },
-    totalPrice: 4
+    totalPrice: 4,
+    purchasable: false
+  }
+
+  updatePurchaseState() {
+    /* ============================================
+    | We want to sum up all the values in the ingredients object,
+    | so that we can control if the burger is able to be purchased,
+    | or not.
+    | Below converts the object into an array, so that we can use
+    | the map and reduce functions on our ingredients list. 
+    | =============================================
+    */
+    const ingredients = {
+      /* ============================================
+      | make a copy of ingredients from state using spread
+      | =============================================
+      */
+      ...this.state.ingredients
+    };
+    /* ============================================
+    | + We need the amounts of the ingredients not the names
+    | 1. const sum = Object.keys(ingredients) makes an array of 
+    | the ingredients.
+    | 2. the map method receives the key, we return the property name,
+    | then we get the value of the given key.
+    | =============================================
+    */
+    const sum = Object.keys(ingredients)
+      .map(igKey => {
+        return ingredients[igKey];
+      })
+      /* ============================================
+      | We use reduce to get the sum of all the ingredients.
+      | REMEMBER - this is not for the price but to see if the
+      | burger has had ingredients added so it is able to be purchased.
+      |
+      | We have set the starting number of 0 at the end of the reduce method.
+      | We then have a function that executes on each element(which isigKey) 
+      | in the array. We get the new sum and the individual element, and then
+      | return the current sum plus the element.
+      | =============================================
+      */
+      .reduce((sum, element) => {
+        return sum + element;
+      }, 0);
+    this.setState({ purchasable: sum > 0 });
   }
 
   addIngredientHandler = (type) => {
@@ -32,6 +78,7 @@ class BurgerBuilder extends Component {
     const oldPrice = this.state.totalPrice;
     const newPrice = oldPrice + priceAddition;
     this.setState({ totalPrice: newPrice, ingredients: updatedIngredients });
+    this.updatePurchaseState();
   }
 
   removeIngredientHandler = (type) => {
@@ -48,6 +95,7 @@ class BurgerBuilder extends Component {
     const oldPrice = this.state.totalPrice;
     const newPrice = oldPrice - priceDeduction;
     this.setState({ totalPrice: newPrice, ingredients: updatedIngredients });
+    this.updatePurchaseState();
   }
 
   render() {
@@ -64,6 +112,7 @@ class BurgerBuilder extends Component {
           ingredientAdded={this.addIngredientHandler}
           ingredientRemoved={this.removeIngredientHandler}
           disabled={disabledInfo}
+          purchasable={this.state.purchasable}
           price={this.state.totalPrice}
         />
       </Aux>
