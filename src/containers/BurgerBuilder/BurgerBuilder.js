@@ -22,7 +22,7 @@ class BurgerBuilder extends Component {
     purchasable: false
   }
 
-  updatePurchaseState() {
+  updatePurchaseState(ingredients) {
     /* ============================================
     | We want to sum up all the values in the ingredients object,
     | so that we can control if the burger is able to be purchased,
@@ -34,13 +34,7 @@ class BurgerBuilder extends Component {
     | added so it is able to be purchased (enabling the order button).
     | =============================================
     */
-    const ingredients = {
-      /* ============================================
-      | Make a copy of ingredients from state using spread
-      | =============================================
-      */
-      ...this.state.ingredients
-    };
+
     /* ============================================
     | + We need the amounts of the ingredients not the names
     | 1. const sum = Object.keys(ingredients) makes an array of 
@@ -85,7 +79,7 @@ class BurgerBuilder extends Component {
     const oldPrice = this.state.totalPrice;
     const newPrice = oldPrice + priceAddition;
     this.setState({ totalPrice: newPrice, ingredients: updatedIngredients });
-    this.updatePurchaseState();
+    this.updatePurchaseState(updatedIngredients);
   }
 
   removeIngredientHandler = (type) => {
@@ -102,7 +96,7 @@ class BurgerBuilder extends Component {
     const oldPrice = this.state.totalPrice;
     const newPrice = oldPrice - priceDeduction;
     this.setState({ totalPrice: newPrice, ingredients: updatedIngredients });
-    this.updatePurchaseState();
+    this.updatePurchaseState(updatedIngredients);
   }
 
   render() {
