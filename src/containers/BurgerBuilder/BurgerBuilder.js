@@ -29,6 +29,9 @@ class BurgerBuilder extends Component {
     | or not.
     | Below converts the object into an array, so that we can use
     | the map and reduce functions on our ingredients list. 
+    | This function will give us the combined amount of ingredients
+    | (sum) at the end, to see if the burger has had ingredients 
+    | added so it is able to be purchased (enabling the order button).
     | =============================================
     */
     const ingredients = {
