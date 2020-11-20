@@ -6,7 +6,9 @@ import BuildControls from '../../components/Burger/BuildControls/BuildControls';
 import Modal from '../../components/UI/Modal/Modal';
 import OrderSummary from '../../components/Burger/OrderSummary/OrderSummary';
 import Spinner from '../../components/UI/Spinner/Spinner';
+import withErrorHandler from '../../hoc/withErrorHandler/withErrorHandler';
 import axios from '../../axios-orders';
+
 
 const INGREDIENT_PRICES = {
   salad: 0.5,
@@ -20,6 +22,7 @@ class BurgerBuilder extends Component {
   //     super(props);
   //     this.state = {...}
   // }
+
   /* ============================================
   | We want to sum up all the values in the ingredients object,
   | so that we can control if the burger is able to be purchased,
@@ -203,4 +206,11 @@ class BurgerBuilder extends Component {
   }
 }
 
-export default BurgerBuilder;
+/*
+|==========================================================
+| 
+| 
+|==========================================================
+ */
+
+export default withErrorHandler(BurgerBuilder, axios);
