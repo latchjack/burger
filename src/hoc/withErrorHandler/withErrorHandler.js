@@ -13,6 +13,8 @@ import Aux from '../Aux/Aux';
 | an error occurs. It is wrapped around the BurgerBuilder export
 | to handle any errors that may occur with requests that pass
 | through that application.
+| To get the request information we pass the second argument
+| into the withErrorHandler function which is exported to the.
 |==========================================================
  */
 

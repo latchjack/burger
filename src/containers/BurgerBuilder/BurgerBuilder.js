@@ -208,8 +208,9 @@ class BurgerBuilder extends Component {
 
 /*
 |==========================================================
-| 
-| 
+| For the withErrorHandler HOC to receive the information of
+| whether or not it's error modal should be rendered it needs
+| the information regarding if the request has failed and an error has been. issued we need to pass the the 
 |==========================================================
  */
 
