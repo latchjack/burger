@@ -18,6 +18,17 @@ class BurgerBuilder extends Component {
     //     super(props);
     //     this.state = {...}
     // }
+    /* ============================================
+    | We want to sum up all the values in the ingredients object,
+    | so that we can control if the burger is able to be purchased,
+    | or not.
+    | Below converts the object into an array, so that we can use
+    | the map and reduce functions on our ingredients list. 
+    | This function will give us the combined amount of ingredients
+    | (sum) at the end, to see if the burger has had ingredients 
+    | added so it is able to be purchased (enabling the order button).
+    | =============================================
+    */
     state = {
         ingredients: {
             salad: 0,
@@ -31,13 +42,36 @@ class BurgerBuilder extends Component {
     }
 
     updatePurchaseState (ingredients) {
+        /* ============================================
+        | + We need the amounts of the ingredients not the names
+        | 1. const sum = Object.keys(ingredients) makes an array of 
+        | the ingredients.
+        | 2. the map method receives the key, we return the property name,
+        | then we get the value of the given key.
+        | =============================================
+        */
         const sum = Object.keys( ingredients )
             .map( igKey => {
                 return ingredients[igKey];
             } )
+            /* ============================================
+            | We use reduce to get the sum of all the ingredients.
+            | REMEMBER - this is not for the price but to see if the
+            | burger has had ingredients added so it is able to be purchased.
+            |
+            | We have set the starting number of 0 at the end of the reduce method.
+            | We then have a function that executes on each element(which isigKey) 
+            | in the array. We get the new sum and the individual element, and then
+            | return the current sum plus the element.
+            | =============================================
+            */
             .reduce( ( sum, el ) => {
                 return sum + el;
             }, 0 );
+        /* ============================================
+        | If sum is greater than 0, purchasable will be either True or False.
+        | =============================================
+        */
         this.setState( { purchasable: sum > 0 } );
     }
 
