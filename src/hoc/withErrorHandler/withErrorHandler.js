@@ -26,7 +26,7 @@ const withErrorHandler = (WrappedComponent, axios) => {
       error: null
     }
 
-    componentDidMount() {
+    UNSAFE_componentWillMount() {
       /*
       |==========================================================
       | The first interceptor listen for the request, so it can clear any
