@@ -168,41 +168,64 @@ class BurgerBuilder extends Component {
 
     /*
     |======================================================
-    | We assigned the OrderSummary component to a variable
-    | below so that we can conditionally render it or the
-    | loading spinner component.
-    | If the state of 'this.state.loading' is equal to true,
-    | it will display the spinner in the modal component  
-    | instead, by re-assigning the orderSummary variable to
-    | the Spinner component. Conditionally rendering one or
-    | one or the other.
+    | The orderSummary is set to null initially, as when the
+    | app renders, the data from the server will not have
+    | been received yet.
     |======================================================
     */
-    let orderSummary = <OrderSummary 
-      ingredients={this.state.ingredients}
-      price={this.state.totalPrice}
-      purchaseCancelled={this.purchaseCancelHandler}
-      purchaseContinued={this.purchaseContinueHandler}
-    />
+    let orderSummary = null; 
 
+    /*
+    |======================================================
+    | The burger variable is assigned a spinner as the axios
+    | request is asynchronous and the data will not be ready
+    | at the time of the get request. This will allow us to
+    | dynamically render the app displaying the loading spinner
+    | if the ingredients have not been fetched yet and then
+    | when they have been received to render those instead.
+    |
+    | The order summary will also be set here so that it will
+    | render only once the ingredients data has been fetched.
+    | It will display the spinner if loading's state is
+    | returned as true when it is checked in the if statement.
+    |======================================================
+    */
+    let burger = <Spinner />;
+
+    if(this.state.ingredients) {
+      burger = (
+        <Aux>
+          <Burger ingredients={this.state.ingredients} />
+          <BuildControls
+            ingredientAdded={this.addIngredientHandler}
+            ingredientRemoved={this.removeIngredientHandler}
+            disabled={disabledInfo}
+            purchasable={this.state.purchasable}
+            ordered={this.purchaseHandler}
+            price={this.state.totalPrice} 
+          />
+        </Aux>
+      );
+      orderSummary = (
+        <OrderSummary 
+          ingredients={this.state.ingredients}
+          price={this.state.totalPrice}
+          purchaseCancelled={this.purchaseCancelHandler}
+          purchaseContinued={this.purchaseContinueHandler}
+        />
+      );
+    }
     if (this.state.loading) {
       orderSummary = <Spinner />;
     }
+
     // {salad: true, meat: false, ...}
     return (
       <Aux>
         <Modal show={this.state.purchasing} modalClosed={this.purchaseCancelHandler}>
           {orderSummary}
         </Modal>
-        <Burger ingredients={this.state.ingredients} />
-        <BuildControls
-          ingredientAdded={this.addIngredientHandler}
-          ingredientRemoved={this.removeIngredientHandler}
-          disabled={disabledInfo}
-          purchasable={this.state.purchasable}
-          ordered={this.purchaseHandler}
-          price={this.state.totalPrice} 
-        />
+        {burger}
       </Aux>
     );
   }
