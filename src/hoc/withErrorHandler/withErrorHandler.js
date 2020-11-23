@@ -9,7 +9,8 @@ import Aux from '../Aux/Aux';
 |
 | This is an Anonymous Class Component. This is set up this way
 | because we never use the class. We just return the component.
-| This is a "Class Factory".
+| This is a "Class Factory". It will create the class inside of
+| the component for each component we wrap the wEH around.
 |
 | We're using this to create an error modal that will pop up when
 | an error occurs. It is wrapped around the BurgerBuilder export
@@ -35,15 +36,44 @@ const withErrorHandler = (WrappedComponent, axios) => {
       | The second interceptor first returns the response (res => res), then
       | it sets the error we get from Firebase/Server, to the error in state. 
       | This will allow us to render the message.
+      |
+      | We should remove these interceptors when the component is unmounted
+      | as it will leak memory. We need to remove old interceptors when they
+      | aren't used any more, as they are sitting in memory and can lead to
+      | errors or accidentally change the state when it is unwanted. For this
+      | we will use the componentWillUnmount function below.
       |==========================================================
       */
-      axios.interceptors.request.use(req => {
+      this.reqInterceptor =  axios.interceptors.request.use(req => {
         this.setState({ error: null });
         return req;
       });
-      axios.interceptors.response.use(res => res, error => {
+      this.resInterceptor =  axios.interceptors.response.use(res => res, error => {
         this.setState({ error: error });
       })
+    }
+
+    /*
+    |==========================================================
+    | This lifecycle method will be fired when the component isn't required any more.
+    | If you need to use this in a functional component you would write this in the 
+    | return function of the useEffect() hook.
+    |
+    | To remove a interceptor we need to store a reference to it
+    | in properties of this class. 
+    | Changing the above, which was previously...
+    | axios.interceptors.request.use()
+    | axios.interceptors.response.use()
+    | to
+    | this.reqInterceptor =  axios.interceptors.request.use()
+    | this.resInterceptor =  axios.interceptors.request.use()
+    | Allows us to eject these interceptors.
+    |==========================================================
+    */
+    componentWillUnmount() {
+      console.log('Will Unmount', this.reqInterceptor, this.resInterceptor);
+      axios.interceptors.request.eject(this.reqInterceptor);
+      axios.interceptors.response.eject(this.resInterceptor);
     }
 
     errorConfirmedHandler = () => {

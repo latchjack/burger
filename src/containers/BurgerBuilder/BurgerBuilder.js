@@ -39,13 +39,17 @@ class BurgerBuilder extends Component {
     totalPrice: 4,
     purchasable: false,
     purchasing: false,
-    loading: false
+    loading: false,
+    error: false
   }
 
   componentDidMount() {
     axios.get('https://burgerbuilder-7f999.firebaseio.com/ingredients.json')
       .then(response => {
         this.setState({ ingredients: response.data });
+      })
+      .catch(error => {
+        this.setState({ error: true })
       });
   }
 
@@ -177,7 +181,9 @@ class BurgerBuilder extends Component {
 
     /*
     |======================================================
-    | The burger variable is assigned a spinner as the axios
+    | The burger variable is assigned a ternary statement where
+    | it first checks to see if error's state is set to true.
+    | spinner as the axios
     | request is asynchronous and the data will not be ready
     | at the time of the get request. This will allow us to
     | dynamically render the app displaying the loading spinner
@@ -190,7 +196,7 @@ class BurgerBuilder extends Component {
     | returned as true when it is checked in the if statement.
     |======================================================
     */
-    let burger = <Spinner />;
+    let burger = this.state.error ? <p>Ingredients can't be loaded!</p> : <Spinner />;
 
     if(this.state.ingredients) {
       burger = (
