@@ -210,7 +210,13 @@ class BurgerBuilder extends Component {
 |==========================================================
 | For the withErrorHandler HOC to receive the information of
 | whether or not it's error modal should be rendered it needs
-| the information regarding if the request has failed and an error has been. issued we need to pass the the 
+| the information regarding if the request has failed. To do
+| this we also export axios from this component along with the
+| BurgerBuilder component. This will pass the error to the 
+| withErrorHandler component, which is listening for requests
+| in second argument of the wEH component, which then passes it
+| to the componentDidMount func which ready with it's 
+| interceptors. Once an error has been issued, it will respond.
 |==========================================================
  */
 
