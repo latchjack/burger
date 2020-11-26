@@ -11,6 +11,23 @@ class Checkout extends Component {
     }
   }
 
+  componentDidMount() {
+    /*
+    |===========================================
+    | This will extract the ingredients from our URL so that
+    | we can render the burger again in this component.
+    |===========================================
+    */
+    const query = new URLSearchParams(this.props.location.search);
+    const ingredients = {};
+    for (let param of query.entries()) {
+      // ['salad', '1] - this is the format that each entry will have
+      ingredients[param[0]] = +param[1];
+    }
+    this.setState({ ingredients: ingredients })
+    // set state of the ingredients to the ingredients we extracted here.
+  }
+
   checkoutCancelledHandler = () => {
     this.props.history.goBack();
   }
