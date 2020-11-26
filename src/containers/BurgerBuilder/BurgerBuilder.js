@@ -127,39 +127,39 @@ class BurgerBuilder extends Component {
   }
 
   purchaseContinueHandler = () => {
-    // alert('You continue!');
-    this.setState({ loading: true });
-    /*
-    |======================================================
-    | Create an object called order to send the order data saved 
-    | in state, along with the hard-coded information. We then
-    | send the info to the server via the axios POST method, to
-    | handle the customer's order.
-    |======================================================
-    */
-    const order = {
-      ingredients: this.state.ingredients,
-      price: this.state.totalPrice,
-      customer: {
-        name: 'Dexter Jack',
-        address: {
-          street: '21 Code Street',
-          postCode: 'e12 6ld',
-          country: 'UK'
-        },
-        email: 'dexter@hackerman.com'
-      },
-      deliveryMethod: 'fastest'
-    }
-    axios.post('/orders.json', order)
-      // .then(response => console.log(response))
-      // .catch(err => console.log(err));
-      .then(response => {
-        this.setState({ loading: false, purchasing: false });
-      })
-      .catch(err => {
-        this.setState({ loading: false, purchasing: false });
-      });
+    // // alert('You continue!');
+    // this.setState({ loading: true });
+    // /*
+    // |======================================================
+    // | Create an object called order to send the order data saved 
+    // | in state, along with the hard-coded information. We then
+    // | send the info to the server via the axios POST method, to
+    // | handle the customer's order.
+    // |======================================================
+    // */
+    // const order = {
+    //   ingredients: this.state.ingredients,
+    //   price: this.state.totalPrice,
+    //   customer: {
+    //     name: 'Dexter Jack',
+    //     address: {
+    //       street: '21 Code Street',
+    //       postCode: 'e12 6ld',
+    //       country: 'UK'
+    //     },
+    //     email: 'dexter@hackerman.com'
+    //   },
+    //   deliveryMethod: 'fastest'
+    // }
+    // axios.post('/orders.json', order)
+    //   // .then(response => console.log(response))
+    //   // .catch(err => console.log(err));
+    //   .then(response => {
+    //     this.setState({ loading: false, purchasing: false });
+    //   })
+    //   .catch(err => {
+    //     this.setState({ loading: false, purchasing: false });
+    //   });
   }
 
   render () {
