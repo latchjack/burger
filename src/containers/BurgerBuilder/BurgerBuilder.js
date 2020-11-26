@@ -160,6 +160,46 @@ class BurgerBuilder extends Component {
     //   .catch(err => {
     //     this.setState({ loading: false, purchasing: false });
     //   });
+    const queryParams = [];
+    for (let i in this.state.ingredients) {
+      queryParams.push(encodeURIComponent(i) + '=' + encodeURIComponent(this.state.ingredients[i]));
+    }
+    const queryString = queryParams.join('&')
+    this.props.history.push({
+      pathname: '/checkout',
+      search: '?' + queryString 
+    });
+    /*
+    |================================================
+    | This^ will now move us to the checkout page 
+    | when Continue is clicked in the purchase modal.
+    | To pass the ingredients on to the rendered burger
+    | on the Checkout page, we push a JS object to /checkout.
+    | In the search parameter we use the queryParams array.
+    | We want to add elements to the array, for this we'll
+    | use a For loop. We loop through all the properties in
+    | this.state.ingredients. Then we use encodeURIComponent
+    | method to encode them so that we can use them in the URL.
+    | The property name 'i' - encodeURIComponent(i) - then we 
+    | add the equals sign because in queryParams we have 
+    | "key=..." (with key being 'i') then the next value 
+    | encoded with encodeURIComponent again (which is a number
+    | - the quantity of the particular ingredient) on
+    | this.state.ingredients[i] for the key that we are at.
+    | This basically will put `${property}`=`${amount}` into
+    | the URL.
+    | To place it correctly into the URL we need to parse the
+    | URL into the correct format so we use the join method on
+    | queryParams and store it in the queryString const. We
+    | then give it to the search parameter in the history.push
+    | method.
+    | Selecting...
+    | 2x bacon, 1x cheese, 1x meat, 1x salad
+    |
+    | RESULT:
+    | http://localhost:3000/checkout?bacon=2&cheese=1&meat=1&salad=1
+    |================================================
+    */ 
   }
 
   render () {
