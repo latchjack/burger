@@ -56,10 +56,10 @@ class ContactData extends Component {
   render() {
     let form = (
       <form>
-        <Input type="text" name="name" placeholder="Your Name" />
-        <Input type="email" name="email" placeholder="Your Email" />
-        <Input type="text" name="street" placeholder="Street Name" />
-        <Input type="text" name="postal" placeholder="Postal Code" />
+        <Input inputtype="input" type="text" name="name" placeholder="Your Name" />
+        <Input inputtype="input" type="email" name="email" placeholder="Your Email" />
+        <Input inputtype="input" type="text" name="street" placeholder="Street Name" />
+        <Input inputtype="input" type="text" name="postal" placeholder="Postal Code" />
         <Button btnType="Success" clicked={this.orderHandler}>ORDER</Button>
       </form>
     );
