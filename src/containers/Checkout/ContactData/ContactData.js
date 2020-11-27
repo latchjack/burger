@@ -65,6 +65,20 @@ class ContactData extends Component {
   orderHandler = (event) => {
     event.preventDefault();
     this.setState({ loading: true });
+    const formData = {};
+    for (let formElementIdentifier in this.state.orderForm) {
+      formData[formElementIdentifier] = this.state.orderForm[formElementIdentifier].value;
+      /*
+      |======================================================
+      | We just want to grab the key (name, street, email, country) 
+      | and the value from our form's state so we can submit it.
+      | We create key, value pairs where we add a new property to
+      | formData and we set the value of that property to the value
+      | the user entered.
+      |======================================================
+      */
+    }
+
     /*
     |======================================================
     | Create an object called order to send the order data saved 
@@ -75,7 +89,8 @@ class ContactData extends Component {
     */
     const order = {
       ingredients: this.props.ingredients,
-      price: this.props.price
+      price: this.props.price,
+      orderData: formData
     }
     axios.post('/orders.json', order)
       // .then(response => console.log(response))
@@ -137,7 +152,7 @@ class ContactData extends Component {
       });
     }
     let form = (
-      <form>
+      <form onSubmit={this.orderHandler}>
         {formElementsArray.map(formElement => (
           <Input 
             key={formElement.id}
@@ -147,7 +162,7 @@ class ContactData extends Component {
             changed={(event) => this.inputChangedHandler(event, formElement.id)}
           />
         ))}
-        <Button btnType="Success" clicked={this.orderHandler}>ORDER</Button>
+        <Button btnType="Success">ORDER</Button>
       </form>
     );
     if (this.state.loading) {
