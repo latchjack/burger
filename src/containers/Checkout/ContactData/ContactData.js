@@ -4,7 +4,6 @@ import Button from '../../../components/UI/Button/Button';
 import Spinner from '../../../components/UI/Spinner/Spinner';
 import Input from '../../../components/UI/Input/Input';
 import classes from './ContactData.module.css';
-import { element } from 'prop-types';
 
 class ContactData extends Component {
   state = {
@@ -90,10 +89,53 @@ class ContactData extends Component {
       });
   }
 
+  inputChangedHandler = (event, inputIdentifier) => {
+    /*
+    |=======================================================
+    | We want to store our inputted values into state. To do
+    | so we capture each event in the 'changed' attribute in
+    | the mapped Input tag within the render function. Along 
+    | with the event itself we also want to pass on the 
+    | identifier (formElement.id). The element id is the key
+    | from our state object (name, street, email). 
+    | We don't want to mutate the state so we create a copy.
+    | We have to create a deep clone in this case, as in our
+    | state, we have nested objects within objects. Not using
+    | our method to deep clone would have us cloning the 
+    | object but losing the nested objects (the data and keys 
+    | inside of the elementConfig object).
+    |=======================================================
+    */
+    const updatedOrderForm = {
+      ...this.state.orderForm
+    };
+    const updatedFormElement = {
+      ...updatedOrderForm[inputIdentifier]
+    };
+    updatedFormElement.value = event.target.value;
+    updatedOrderForm[inputIdentifier] = updatedFormElement;
+    this.setState({ orderForm: updatedOrderForm })
+  }
+
   render() {
+    const formElementsArray = []
+    for (let key in this.state.orderForm) {
+      formElementsArray.push({
+        id: key,
+        config: this.state.orderForm[key]
+      });
+    }
     let form = (
       <form>
-        <Input elementType="" elementConfig="" value="" />
+        {formElementsArray.map(formElement => (
+          <Input 
+            key={formElement.id}
+            elementType={formElement.config.elementType}
+            elementConfig={formElement.config.elementConfig}
+            value={formElement.config.value}
+            changed={(event) => this.inputChangedHandler(event, formElement.id)}
+          />
+        ))}
         <Button btnType="Success" clicked={this.orderHandler}>ORDER</Button>
       </form>
     );
@@ -108,5 +150,18 @@ class ContactData extends Component {
     );
   }
 };
+
+/*
+|=======================================================
+| For the form we want to create all of the Inputs components dynamically. 
+| The orderForm in state is an object, so we want to transform it into 
+| an array so we can loop through it (our formElementsArray array).
+| The array will contain JS objects, where the key is the identifier property
+| (name, street, postCode) whilst still maintaining the other keys 
+| (elementConfig & value).
+| We use the For loop to do this whilst pushing the elements into the array 
+| , then mapping over the array to produce the Input component tags.
+|=======================================================
+*/
 
 export default ContactData;
