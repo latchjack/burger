@@ -47,10 +47,28 @@ const input = (props) => {
         onChange={props.changed} />;
   }
 
+  let validationError = null;
+  if (props.invalid && props.touched) {
+    validationError = (
+      <p 
+        style={{
+          fontSize: '12px', 
+          color: 'red', 
+          marginTop: '4px', 
+          marginBottom: '1px', 
+          boxSizing: 'border-box'
+        }}
+      >
+        Please enter a valid {props.valueType}!
+      </p>
+    );
+  }
+
   return(
     <div className={classes.Input}>
       <label className={classes.Label}>{props.label}</label>
       {inputElement}
+      {validationError}
     </div>
   );
 }
