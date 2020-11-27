@@ -127,17 +127,25 @@ class ContactData extends Component {
   }
   
   checkValidity (value, rules) {
-    let isValid = false;
+    let isValid = true;
     if (rules.required) {
-      isValid = value.trim() !== '';
+      isValid = value.trim() !== '' && isValid;
     }
     if (rules.minLength) {
-      isValid = value.length >= rules.minLength;
+      isValid = value.length >= rules.minLength && isValid;
     }
     if (rules.maxLength) {
-      isValid = value.length <= rules.maxLength;
+      isValid = value.length <= rules.maxLength && isValid;
     }
-
+    /*
+    |======================================================
+    | By chaining the '&& isValid' condition to the end of 
+    | each rule, it is checking to make sure that all the 
+    | rules pass. Otherwise, without it, even if all the prior
+    | checks fail but the last If check passes it would let
+    | the whole validity check pass.
+    |======================================================
+    */
     return isValid;
   }
 
@@ -197,6 +205,8 @@ class ContactData extends Component {
             elementType={formElement.config.elementType}
             elementConfig={formElement.config.elementConfig}
             value={formElement.config.value}
+            invalid={!formElement.config.valid}
+            shouldValidate={formElement.config.validation}
             changed={(event) => this.inputChangedHandler(event, formElement.id)}
           />
         ))}
