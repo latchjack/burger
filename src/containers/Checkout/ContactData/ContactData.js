@@ -103,7 +103,18 @@ class ContactData extends Component {
     | state, we have nested objects within objects. Not using
     | our method to deep clone would have us cloning the 
     | object but losing the nested objects (the data and keys 
-    | inside of the elementConfig object).
+    | inside of the elementConfig object). Instead we would 
+    | just be copying a pointer to the storage location of
+    | that data, which would cause us to mutate the original
+    | state when we use setState.
+    | So we clone the state of orderForm into updatedOrderForm
+    | and then we clone updatedOrderForm and its data (type &
+    | placeholder - by accessing it with [inputIdentifier]) 
+    | into the updatedFormElement.
+    | We then get the updatedFormElement's value and set it to
+    | the event target value. Then we access the input 
+    | identifier and set it equel to the updatedFormElement.
+    | Lastly we set the state of orderForm to updatedOrderForm.
     |=======================================================
     */
     const updatedOrderForm = {
