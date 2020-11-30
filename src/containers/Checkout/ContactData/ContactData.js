@@ -91,6 +91,31 @@ class ContactData extends Component {
     loading: false
   }
 
+/*
+|======================================================
+| React doesn't have built in validation so we have to 
+| build our own. The way we have done it in this comp is
+| to add the state of validation to state and set it's
+| required field to 'true'.
+| validation: {
+|   required: true
+| }
+| To check it we create a new method called checkValidity,
+| where we get the value and the rules as arguments, it 
+| will return True or False to determine if it is valid
+| or not. We add the Valid property to state and set it
+| to False (we also could have added this as another field
+| in the validation state).
+| If rules has a required rule then we want to adjust the
+| isValid variable. isValid is initially set to False.
+| We want to set isValid equal to true or false (trim removes
+| the white space) if the value of its input box is not
+| equal to the empty string ''(no space between). If it is
+| not equal to '' isValid will be True. We then return 
+| isValid (be it True or False).
+|======================================================
+*/  
+
   orderHandler = (event) => {
     event.preventDefault();
     this.setState({ loading: true });
@@ -202,6 +227,18 @@ class ContactData extends Component {
 
     this.setState({ orderForm: updatedOrderForm, formIsValid: formIsValid })
   }
+  /*
+  |=======================================================
+  | We set formIsValid in state so that we can check all inputs are valid.
+  | We have a variable called formIsValid and initially set it to true,
+  | we then will loop through the form, treating each input box as the
+  | inputIdentifier. So for each input box we check to see if it valid
+  | 'updatedOrderForm[inputIdentifier].valid' using the valid property, to
+  | stop the last value from setting the state to true if the previous checked
+  | boxes were false we add the '&& formIsValid' check to make sure that the
+  | previous have also passed.
+  |=======================================================
+  */
 
   render() {
     const formElementsArray = []
