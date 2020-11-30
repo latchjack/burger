@@ -83,7 +83,8 @@ class ContactData extends Component {
             { value: 'regular', displayValue: 'Regular' }
           ]
         },
-        value: '',
+        value: 'regular',
+        validation: {},
         valid: true
       }
     },
@@ -160,6 +161,9 @@ class ContactData extends Component {
   
   checkValidity (value, rules) {
     let isValid = true;
+    if (!rules) {
+      return true;
+    }
     if (rules.required) {
       isValid = value.trim() !== '' && isValid;
     }
@@ -237,6 +241,16 @@ class ContactData extends Component {
   | stop the last value from setting the state to true if the previous checked
   | boxes were false we add the '&& formIsValid' check to make sure that the
   | previous have also passed.
+  | This was formIsValid is only updated to true if both fields are true.
+  | We then set the state of formIsValid to the variable of formIsValid.
+  | We use this to enable the ORDER button to work. Using the disabled
+  | attribute, if the formIsValid returns false the disabled attribute
+  | will apply the disabled state to the button using props.
+  | disabled={props.disabled} (this is because we're using our created
+  | button -  <Button/> - and not the typical html button).
+  |
+  | Note - Undefined is always treated as False but it can never be change
+  | to True.
   |=======================================================
   */
 
