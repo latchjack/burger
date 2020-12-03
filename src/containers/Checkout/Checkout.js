@@ -1,35 +1,10 @@
 import React, { Component } from 'react';
 import { Route } from 'react-router-dom';
+import { connect } from 'react-redux';
 import CheckoutSummary from '../../components/Order/CheckoutSummary/CheckoutSummary';
 import ContactData from './ContactData/ContactData';
 
 class Checkout extends Component {
-  state = {
-    ingredients: null,
-    price: 0
-  }
-
-  UNSAFE_componentWillMount() {
-    /*
-    |===========================================
-    | This will extract the ingredients from our URL so that
-    | we can render the burger again in this component.
-    |===========================================
-    */
-    const query = new URLSearchParams(this.props.location.search);
-    const ingredients = {};
-    let price = 0;
-    for (let param of query.entries()) {
-      // ['salad', '1] - this is the format that each entry will have
-      if (param[0] === 'price') {
-        price = param[1];
-      } else {
-        ingredients[param[0]] = +param[1];
-      }
-    }
-    this.setState({ ingredients: ingredients, totalPrice: price })
-    // set state of the ingredients to the ingredients we extracted here.
-  }
 
   checkoutCancelledHandler = () => {
     this.props.history.goBack();
@@ -43,23 +18,38 @@ class Checkout extends Component {
     return(
       <div>
         <CheckoutSummary 
-          ingredients={this.state.ingredients}
+          ingredients={this.props.ings}
           checkoutCancelled={this.checkoutCancelledHandler}
           checkoutContinued={this.checkoutContinuedHandler}
         />
         <Route 
           path={this.props.match.path + '/contact-data'} 
-          render={(props) => (
-            <ContactData 
-              ingredients={this.state.ingredients} 
-              price={this.state.totalPrice} 
-              {...props} 
-            />
-          )} 
+          component={ContactData} 
         />
       </div>
     );
   }
 }
 
-export default Checkout;
+const maptStateToProps = state => {
+  return {
+    // must be named state.ingredients as ingredients
+    // is what we have store in our Reducer's state
+    ings: state.ingredients
+  }
+}
+
+export default connect(maptStateToProps)(Checkout);
+
+/*
+|========================================
+| we don't need to dispatch anything from here so we haven't used
+| mapDispatchToProps. So when we use connect we can ommit passing
+| it to the connect method 'connect(maptStateToProps)(ComponentName)'
+| However, if we needed to use dispatch but not maptStateToProps we 
+| would have to pass null as the first argument to connect...
+| 'connect(null, mapDispatchToProps)(ComponentName)'
+| maptStateToProps must always be the first argument and 
+| mapDispatchToProps must always be the second.
+|========================================
+*/
