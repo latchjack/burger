@@ -62,6 +62,19 @@ class Auth extends Component {
     return isValid;
   }
 
+  inputChangedHandler = (event, controlName) => {
+    const updatedControls = {
+      ...this.state.controls,
+      [controlName]: {
+        ...this.state.controls[controlName],
+        value: event.target.value,
+        valid: this.checkValidity(event.target.value, this.state.controls[controlName].validation),
+        touched: true
+      }
+    };
+    this.setState({ controls: updatedControls })
+  }
+
   render() {
     const formElementsArray = []
     for (let key in this.state.controls) {
